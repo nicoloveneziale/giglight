@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { Pool } from 'pg';
 import authRoutes from './routes/auth';
+import bandRoutes from "./routes/bands"
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.get('/', (req, res) => {
 
 
 app.use('/api/auth', authRoutes); 
+app.use('/api/bands', bandRoutes)
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
