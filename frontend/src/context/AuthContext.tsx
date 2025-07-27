@@ -55,15 +55,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
           if (response.ok) {
             const data = await response.json();
-            if (data.user && data.user.id && data.user.email && data.user.user_type) {
+            if (data.user && data.user.id && data.user.email && data.user.userType) {
                 setUser(data.user as User);
                 setIsAuthenticated(true);
             } else {
-                console.error('Verify token endpoint returned incomplete user data:', data.user);
+              console.log(data.user)
                 logout(); 
             }
           } else {
-            console.error('Token verification failed:', response.status);
             logout(); 
           }
         } catch (err) {

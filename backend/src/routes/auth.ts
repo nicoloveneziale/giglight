@@ -123,5 +123,9 @@ router.get('/protected', authMiddleware, (req: AuthRequest, res: Response) => {
   }
 });
 
+router.get('/verify-token', authMiddleware, (req: AuthRequest, res: Response) => {
+  res.json({ message: 'Token is valid', user: req.user });
+});
+
 
 export default router;
