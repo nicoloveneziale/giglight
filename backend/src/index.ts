@@ -2,9 +2,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import path from 'path';
 import { Pool } from 'pg';
 import authRoutes from './routes/auth';
 import bandRoutes from "./routes/bands"
+import uploadRoutes from "./routes/upload"
 
 dotenv.config();
 
@@ -29,15 +31,11 @@ pool.connect((err, client, done) => {
 
 app.use(cors()); 
 app.use(express.json());
-
-
-app.get('/', (req, res) => {
-  res.send('GigLight Backend API is running!');
-});
-
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/auth', authRoutes); 
-app.use('/api/bands', bandRoutes)
+app.use('/api/bands', bandRoutes);
+app.use('api/upload', uploadRoutes)
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

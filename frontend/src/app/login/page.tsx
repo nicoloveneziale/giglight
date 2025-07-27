@@ -39,6 +39,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         login(data.token, data.user);
+        console.log(data.user)
       } else {
         setError(data.message || 'Login failed');
       }

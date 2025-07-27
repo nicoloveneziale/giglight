@@ -41,7 +41,7 @@ export default function DashboardPage() {
         <p className="mt-4 text-gray-500 text-sm">
           Create your band profile
         </p>
-        <Link href="/profile"> here</Link>
+        <Link href="/band-profile"> here</Link>
       </div>
     </div>
   );
