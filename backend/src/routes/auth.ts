@@ -8,7 +8,7 @@ dotenv.config();
 
 const router = Router();
 const pool = new Pool({
-  connectionString: process.env.DB_URI,
+  connectionString: process.env.POSTGRES_URL,
 });
 const jwtSecret = process.env.JWT_SECRET as string;
 
@@ -58,7 +58,14 @@ router.post('/register', async (req: Request, res: Response) => {
     );
 
     const user = result.rows[0];
-    res.status(201).json({ message: 'User registered successfully', user: { id: user.id, email: user.email, userType: user.user_type } });
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email, user_type: user.user_type },
+      jwtSecret,
+      { expiresIn: '1h' } 
+    );
+
+    res.status(201).json({ message: 'User registered successfully', token, user: { id: user.id, email: user.email, userType: user.user_type } });
   } catch (error) {
     console.error('Registration error:', error);
     if ((error as any).code === '23505') { 

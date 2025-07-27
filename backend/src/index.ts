@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 
 
 const pool = new Pool({
-  connectionString: process.env.DB_URI,
+  connectionString: process.env.POSTGRES_URL,
 });
 
 
