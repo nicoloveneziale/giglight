@@ -58,26 +58,6 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   }
 });
 
-router.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try {
-    const result = await pool.query(
-      `SELECT ${VENUE_SELECT_FIELDS} FROM venues WHERE id = $1`,
-      [id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Venue not found.' });
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error fetching venue by ID:', error);
-    res.status(500).json({ message: 'Server error fetching venue.' });
-  }
-});
-
 router.get('/search', async (req: Request, res: Response) => {
     const { q, name, address, city, postcode } = req.query;
 
@@ -124,6 +104,26 @@ router.get('/search', async (req: Request, res: Response) => {
         console.error('Error searching venues:', error);
         res.status(500).json({ message: 'Server error searching venues.' });
     }
+});
+
+router.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `SELECT ${VENUE_SELECT_FIELDS} FROM venues WHERE id = $1`,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Venue not found.' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error fetching venue by ID:', error);
+    res.status(500).json({ message: 'Server error fetching venue.' });
+  }
 });
 
 

@@ -37,7 +37,9 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/auth', authRoutes); 
 app.use('/api/bands', bandRoutes);
-app.use('/api/upload', uploadRoutes)
+app.use('/api/upload', uploadRoutes);
+app.use('/api/gigs', gigRoutes);
+app.use('/api/venues', venueRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

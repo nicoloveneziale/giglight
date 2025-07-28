@@ -175,11 +175,18 @@ const Header: React.FC = () => {
                 </Link>
               </li>
               {bandProfile.id && (
+              <>
               <li>
                 <Link href={`/bands/${bandProfile.id}`} className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
                   Your Band Profile
                 </Link>
               </li>
+              <li>
+                <Link href={"/create-gig"} className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+                  Create Gig +
+                </Link>
+              </li>
+              </>
               )
               }
               </>
