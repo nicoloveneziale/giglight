@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react'; 
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import Image from 'next/image';
-
 
 interface BandProfileFormProps {
   formData: {
@@ -18,7 +16,6 @@ interface BandProfileFormProps {
     spotify_url: string | null;
     youtube_url: string | null;
   };
-
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
@@ -26,17 +23,21 @@ interface BandProfileFormProps {
   error: string;
   successMessage: string;
   profileExists: boolean;
-  userEmail: string; 
-  previewImage: string | null; 
+  userEmail: string;
+  previewImage: string | null;
 }
 
-
 const genres = [
+  'Please Select',
   'Rock', 'Pop', 'Hip Hop', 'Electronic', 'R&B', 'Jazz', 'Blues', 'Country',
   'Classical', 'Metal', 'Punk', 'Folk', 'Indie', 'Alternative', 'Reggae',
   'Funk', 'Soul', 'Gospel', 'Ambient', 'Techno', 'House', 'Dubstep',
   'Trance', 'Acoustic', 'World', 'Latin', 'K-Pop', 'J-Pop', 'Soundtrack'
-].sort(); 
+].sort((a, b) => {
+  if (a === 'Please Select') return -1;
+  if (b === 'Please Select') return 1;
+  return a.localeCompare(b);
+});
 
 const BandProfileForm: React.FC<BandProfileFormProps> = ({
   formData,
@@ -48,10 +49,37 @@ const BandProfileForm: React.FC<BandProfileFormProps> = ({
   successMessage,
   profileExists,
   userEmail,
-  previewImage,
+  previewImage, 
 }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const currentImageSrc = previewImage || formData.profile_picture_url || 'https://via.placeholder.com/150/EEEEEE/808080?text=Upload+Image';
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click(); 
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="mb-4 flex flex-col items-center">
+        <p className="text-gray-700 text-sm font-bold mb-2">Profile Picture:</p>
+        <input
+          type="file"
+          id="profile_picture_upload"
+          accept="image/*"
+          ref={fileInputRef} 
+          onChange={handleFileChange} 
+          className="hidden" 
+        />
+        <img
+          src={currentImageSrc}
+          alt="Profile Preview"
+          className="w-32 h-32 object-cover rounded-full border border-gray-300 shadow-md cursor-pointer transition-opacity duration-300 hover:opacity-80"
+          onClick={handleImageClick} 
+        />
+        <p className="text-gray-600 text-xs mt-2">Click the image to upload or change</p>
+      </div>
+
       <div className="mb-6">
         <p className="text-gray-700 text-sm font-bold mb-2">Logged in as:</p>
         <p className="text-gray-900 mb-4">{userEmail} (Band Account)</p>
@@ -73,13 +101,14 @@ const BandProfileForm: React.FC<BandProfileFormProps> = ({
         </label>
         <select
           id="genre"
+          name="genre" 
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out text-base"
-          value={formData.genre || ''}
+          value={formData.genre || 'Please Select'} 
           onChange={handleChange}
         >
           {genres.map((genreOption) => (
-            <option key={genreOption} value={genreOption}>
-              {genreOption === '' ? 'Please Select' : genreOption}
+            <option key={genreOption} value={genreOption === 'Please Select' ? '' : genreOption}>
+              {genreOption}
             </option>
           ))}
         </select>
@@ -101,28 +130,6 @@ const BandProfileForm: React.FC<BandProfileFormProps> = ({
         value={formData.location || ''}
         onChange={handleChange}
       />
-
-      <Input
-        label="Profile Picture"
-        id="profile_picture_upload" 
-        type="file"
-        onChange={handleFileChange} 
-        accept="image/*" 
-      />
-      {previewImage && (
-        <div className="mb-4">
-          <p className="block text-gray-700 text-sm font-bold mb-2">Preview:</p>
-          <img src={previewImage} alt="Profile Preview" className="w-32 h-32 object-cover rounded-full border border-gray-300" />
-        </div>
-      )}
-      {formData.profile_picture_url && !previewImage && (
-        <div className="mb-4">
-          <p className="block text-gray-700 text-sm font-bold mb-2">Current Image:</p>
-          <img src={formData.profile_picture_url} alt="Current Profile" className="w-32 h-32 object-cover rounded-full border border-gray-300" />
-        </div>
-      )}
-
-
       <Input
         label="Website URL"
         id="website_url"

@@ -17,7 +17,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <Header /> 
-          <main className="flex-grow"> 
+          <main className="flex-grow min-h-screen overflow-hidden"> 
             {children}
           </main>
         </AuthProvider>

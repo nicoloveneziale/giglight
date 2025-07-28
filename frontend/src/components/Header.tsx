@@ -4,14 +4,63 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import Button from '@/components/Button';
+import api from '@/lib/api';
+
+interface BandProfile {
+  id: string;
+  user_id: string;
+  name: string;
+  genre: string | null;
+  bio: string | null;
+  location: string | null;
+  profile_picture_url: string | null;
+  website_url: string | null;
+  facebook_url: string | null;
+  instagram_url: string | null;
+  bandcamp_url: string | null;
+  spotify_url: string | null;
+  youtube_url: string | null;
+}
 
 const Header: React.FC = () => {
   const { isAuthenticated, user, logout, loadingAuth } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [bandProfile, setBandProfile] = useState<Partial<BandProfile>>({});
 
   useEffect(() => {
     setIsMenuOpen(false);
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    const fetchBandProfile = async () => {
+      if (!isAuthenticated || !user || user.userType !== 'band') {
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        setError('');
+        const response = await api.get<BandProfile>('/bands/profile');
+        setBandProfile(response.data);
+      } catch (err: any) {
+        if (err.response?.status === 401) {
+          logout();
+          setError(err.response?.data?.message || 'Authentication error. Please log in again.');
+        } else {
+          console.error('Failed to fetch band profile:', err);
+          setError(err.response?.data?.message || 'Failed to fetch band profile.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (isAuthenticated && !loadingAuth && user?.userType === 'band') {
+      fetchBandProfile();
+    }
+  }, [isAuthenticated, loadingAuth, user, logout]);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -119,11 +168,21 @@ const Header: React.FC = () => {
               </Link>
             </li>
             {isAuthenticated && (
+              <>
               <li>
                 <Link href="/dashboard" className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
                   Dashboard
                 </Link>
               </li>
+              {bandProfile.id && (
+              <li>
+                <Link href={`/bands/${bandProfile.id}`} className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+                  Your Band Profile
+                </Link>
+              </li>
+              )
+              }
+              </>
             )}
           </ul>
 

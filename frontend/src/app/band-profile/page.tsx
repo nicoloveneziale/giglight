@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -185,8 +184,8 @@ export default function BandProfilePage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] mt-20 md:mt-30 flex items-center justify-center p-4 sm:p-6 bg-gray-100">
-      <AuthCard title={profileExists ? `${user?.email}'s Band Profile` : `Create Your Band Profile`}>
+    <div className="min-h-[calc(100vh-64px)] mt-20 flex items-center justify-center p-4 sm:p-6">
+      <AuthCard title={profileExists ? `Update Your Band Profile` : `Create Your Band Profile`}>
         <BandProfileForm
           formData={formData}
           handleChange={handleChange}

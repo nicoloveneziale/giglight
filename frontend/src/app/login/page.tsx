@@ -53,7 +53,7 @@ export default function LoginPage() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
       <AuthCard title="Sign In to GigLight">
         <form onSubmit={handleSubmit}>
           <Input

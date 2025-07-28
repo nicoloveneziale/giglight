@@ -27,7 +27,7 @@ export default function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4 py-8 mt-15">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+      <div className="bg-gray-100 p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-gray-700">Your Activities</h2>
         {user?.userType === 'band' ? (
           <p className="text-gray-600">
@@ -39,9 +39,9 @@ export default function DashboardPage() {
           </p>
         )}
         <p className="mt-4 text-gray-500 text-sm">
-          Create your band profile
+          Create your band profile:
+          <Link href="/band-profile" className="text-blue-500 underline">here</Link>
         </p>
-        <Link href="/band-profile"> here</Link>
       </div>
     </div>
   );

@@ -54,7 +54,7 @@ const [email, setEmail] = useState('');
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
       <AuthCard title="Sign Up for GigLight">
         <form onSubmit={handleSubmit}>
           <Input
@@ -92,7 +92,7 @@ const [email, setEmail] = useState('');
 
           {error && <p className="text-red-500 text-xs italic mb-4">{error}</p>}
 
-          <div className="flex items-center justify-center sm:justify-between flex-wrap"> {/* Responsive flex */}
+          <div className="flex items-center justify-center sm:justify-between flex-wrap"> 
             <Button type="submit" isLoading={loading}>
               Sign Up
             </Button>
