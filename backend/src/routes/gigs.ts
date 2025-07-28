@@ -22,7 +22,7 @@ const GIG_SELECT_FIELDS =
   'id, band_id, venue_id, title, description, start_time, end_time, ticket_url, promo_image_url, is_promoted, views';
 
 
-router.post('/new', authMiddleware, async (req: AuthRequest, res: Response) => {
+router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
   const userId = req.user?.id;
   const userType = req.user?.userType;
 
@@ -87,7 +87,7 @@ router.get('/:gigId', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:gigId/edit', authMiddleware, async (req: AuthRequest, res: Response) => {
+router.put('/:gigId', authMiddleware, async (req: AuthRequest, res: Response) => {
   const userId = req.user?.id;
   const userType = req.user?.userType;
   const { gigId } = req.params;
@@ -133,3 +133,5 @@ router.put('/:gigId/edit', authMiddleware, async (req: AuthRequest, res: Respons
     res.status(500).json({ message: 'Server error updating band profile.' });
   }
 });
+
+export default router;

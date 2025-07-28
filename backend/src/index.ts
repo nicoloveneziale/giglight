@@ -5,8 +5,10 @@ import cors from 'cors';
 import path from 'path';
 import { Pool } from 'pg';
 import authRoutes from './routes/auth';
-import bandRoutes from "./routes/bands"
-import uploadRoutes from "./routes/upload"
+import bandRoutes from "./routes/bands";
+import uploadRoutes from "./routes/upload";
+import gigRoutes from "./routes/gigs";
+import venueRoutes from "./routes/venues";
 
 dotenv.config();
 
