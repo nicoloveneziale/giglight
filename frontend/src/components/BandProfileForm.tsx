@@ -52,8 +52,9 @@ const BandProfileForm: React.FC<BandProfileFormProps> = ({
   previewImage, 
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL; 
 
-  const currentImageSrc = previewImage || formData.profile_picture_url || 'https://via.placeholder.com/150/EEEEEE/808080?text=Upload+Image';
+  const currentImageSrc = previewImage || `${backendUrl}${formData.profile_picture_url}` || 'https://via.placeholder.com/150/EEEEEE/808080?text=Upload+Image';
 
   const handleImageClick = () => {
     fileInputRef.current?.click(); 

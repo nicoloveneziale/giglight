@@ -31,6 +31,8 @@ export default function SingleBandPage() {
   const [error, setError] = useState('');
   const {user}= useAuth();
 
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL; 
+
   useEffect(() => {
     const fetchBand = async () => {
       if (!bandId) {
@@ -86,7 +88,7 @@ export default function SingleBandPage() {
           <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg mb-4">
             {band.profile_picture_url ? (
               <img
-                src={band.profile_picture_url}
+                src={`${backendUrl}${band.profile_picture_url}`}
                 alt={`${band.name} profile`}
                 className="w-full h-full object-cover"
               />
@@ -104,7 +106,7 @@ export default function SingleBandPage() {
         <div className="md:w-2/3 p-6">
         { (user && band.user_id === user.id) && (
             <div className="flex items-center justify-center">
-                <Link href="/band-profile" className="flex items-center justify-center w-1/2  bg-gray-200 text-2xl font-bold min-h-12 rounded-xl text-gray-800 mb-4 shadow-md">Edit</Link>
+                <Link href="/band-profile" className="flex items-center justify-center w-1/2  bg-gray-200 text-2xl font-bold min-h-12 rounded text-gray-800 mb-4 shadow-md">Edit</Link>
             </div>
         )}
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">About {band.name}</h2>

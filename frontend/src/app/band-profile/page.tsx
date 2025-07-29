@@ -47,6 +47,8 @@ export default function BandProfilePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null); 
 
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
   useEffect(() => {
     if (!loadingAuth) {
@@ -74,7 +76,7 @@ export default function BandProfilePage() {
         setFormData(response.data);
         setProfileExists(true);
         if (response.data.profile_picture_url) {
-            setPreviewImage(response.data.profile_picture_url);
+            setPreviewImage(`${backendUrl}${response.data.profile_picture_url}`);
         }
       } catch (err: any) {
         if (err.response?.status === 404) {
@@ -114,7 +116,7 @@ export default function BandProfilePage() {
       reader.readAsDataURL(file);
     } else {
       setSelectedFile(null);
-      setPreviewImage(formData.profile_picture_url); 
+      setPreviewImage(`${backendUrl}${formData.profile_picture_url}`); 
     }
   };
 
