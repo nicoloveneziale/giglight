@@ -10,12 +10,14 @@ interface BandCardProps {
 }
 
 const BandCard: React.FC<BandCardProps> = ({ id, name, genre, location, profile_picture_url }) => {
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
   return (
     <Link href={`/bands/${id}`} className="block bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
       <div className="relative w-full h-48 bg-gray-200 flex items-center justify-center">
         {profile_picture_url ? (
           <img
-            src={profile_picture_url}
+            src={`${backendUrl}${profile_picture_url}`}
             alt={`${name} profile`}
             className="w-full h-full object-cover"
           />

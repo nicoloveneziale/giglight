@@ -78,7 +78,7 @@ const Header: React.FC = () => {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gray-800 text-white shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white shadow-md">
       <div className="container mx-auto p-4 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold text-white transition-colors duration-200 hover:text-blue-400">
           GigLight
@@ -165,6 +165,11 @@ const Header: React.FC = () => {
             <li>
               <Link href="/gigs" className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
                 Gigs
+              </Link>
+            </li>
+            <li>
+              <Link href="/bands" className="block text-white hover:text-blue-400 transition-colors duration-200" onClick={() => setIsMenuOpen(false)}>
+                Bands
               </Link>
             </li>
             {isAuthenticated && (

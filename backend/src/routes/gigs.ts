@@ -43,8 +43,8 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
     promo_image_url, 
   } = req.body;
 
-  if (!title || !venue_id || !start_time) {
-    return res.status(400).json({ message: 'Title, venue, and start time are required.' });
+  if (!title || !venue_id || !start_time || !end_time) {
+    return res.status(400).json({ message: 'Title, venue, and times are required.' });
   }
 
   try {

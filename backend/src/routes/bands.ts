@@ -21,6 +21,60 @@ if (!jwtSecret) {
 const BAND_PROFILE_SELECT_FIELDS =
   'id, user_id, name, bio, profile_picture_url, website_url, facebook_url, instagram_url, bandcamp_url, spotify_url, youtube_url, genre, location';
 
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(
+      `SELECT ${BAND_PROFILE_SELECT_FIELDS} FROM bands ORDER BY name ASC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching all band profiles:', error);
+    res.status(500).json({ message: 'Server error fetching all band profiles.' });
+  }
+});
+
+router.get('/search', async (req: Request, res: Response) => {
+    const { q, name, genre, location } = req.query;
+
+    let queryParts: string[] = [];
+    let queryParams: any[] = [];
+    let paramIndex = 1;
+
+    if (q) {
+        queryParts.push(`(name ILIKE $${paramIndex} OR bio ILIKE $${paramIndex} OR website_url ILIKE $${paramIndex} OR genre ILIKE $${paramIndex} OR location ILIKE $${paramIndex})`);
+        queryParams.push(`%${q}%`);
+        paramIndex++;
+    }
+    if (name) {
+        queryParts.push(`name ILIKE $${paramIndex}`);
+        queryParams.push(`%${name}%`);
+        paramIndex++;
+    }
+    if (genre) {
+        queryParts.push(`genre ILIKE $${paramIndex}`);
+        queryParams.push(`%${genre}%`);
+        paramIndex++;
+    }
+    if (location) {
+        queryParts.push(`location ILIKE $${paramIndex}`);
+        queryParams.push(`%${location}%`);
+        paramIndex++;
+    }
+
+    let queryString = `SELECT ${BAND_PROFILE_SELECT_FIELDS} FROM bands`;
+    if (queryParts.length > 0) {
+        queryString += ` WHERE ${queryParts.join(' AND ')}`;
+    }
+    queryString += ` ORDER BY name ASC LIMIT 50`; 
+
+    try {
+        const result = await pool.query(queryString, queryParams);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error searching bands:', error);
+        res.status(500).json({ message: 'Server error searching bands.' });
+    }
+});
 
 router.get('/profile', authMiddleware, async (req: AuthRequest, res: Response) => {
   const userId = req.user?.id;
@@ -160,6 +214,35 @@ router.get('/:bandId', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching public band profile:', error);
     res.status(500).json({ message: 'Server error fetching public band profile.' });
+  }
+});
+
+router.get('/:bandId/gigs', async (req: Request, res: Response) => {
+  const { bandId } = req.params;
+
+  try {
+    const gigsResult = await pool.query(
+      `SELECT
+         g.id,
+         g.title,
+         g.start_time,
+         g.end_time,
+         g.description,
+         g.promo_image_url,
+         v.name AS venue_name,
+         v.address AS venue_address,
+         v.city 
+       FROM gigs g
+       JOIN venues v ON g.venue_id = v.id
+       WHERE g.band_id = $1 AND g.start_time >= CURRENT_DATE
+       ORDER BY g.start_time ASC`,
+      [bandId]
+    );
+
+    res.json(gigsResult.rows);
+  } catch (error) {
+    console.error('Error fetching band gigs:', error);
+    res.status(500).json({ message: 'Server error fetching band gigs.' });
   }
 });
 
